@@ -101,6 +101,16 @@ export function IntakeForm() {
     apn: "",
     acreage: 0,
     zoning: "",
+    zoningOther: "",
+    roadAccess: "",
+    landUtilities: {
+      water: false,
+      electric: false,
+      sewer: false,
+      septic: false,
+      none: false,
+      unknown: false,
+    },
     numberOfParcels: 1,
     multiParcelSpreadsheet: null,
     // Comum
@@ -187,6 +197,12 @@ export function IntakeForm() {
         if (!formData.apn) newErrors.apn = "Required field";
         if (formData.acreage <= 0) newErrors.acreage = "Required field";
         if (!formData.zoning) newErrors.zoning = "Required field";
+        if (formData.zoning === "other" && !formData.zoningOther) newErrors.zoningOther = "Required field";
+        if (!formData.roadAccess) newErrors.roadAccess = "Required field";
+        const utilities = formData.landUtilities;
+        if (!utilities.water && !utilities.electric && !utilities.sewer && !utilities.septic && !utilities.none && !utilities.unknown) {
+          newErrors.landUtilities = "Please select at least one option";
+        }
         if (!formData.financingStructure) newErrors.financingStructure = "Required field";
       }
     }
@@ -388,6 +404,9 @@ export function IntakeForm() {
               apn={formData.apn}
               acreage={formData.acreage}
               zoning={formData.zoning}
+              zoningOther={formData.zoningOther}
+              roadAccess={formData.roadAccess}
+              landUtilities={formData.landUtilities}
               numberOfParcels={formData.numberOfParcels}
               multiParcelSpreadsheet={formData.multiParcelSpreadsheet}
               financingStructure={formData.financingStructure}

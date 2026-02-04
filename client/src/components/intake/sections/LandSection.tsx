@@ -7,12 +7,51 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "../FileUpload";
-import type { FinancingStructure } from "@/types/intake";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import type { FinancingStructure, LandZoning, RoadAccess, LandUtilities } from "@/types/intake";
+
+const ZONING_OPTIONS: { value: LandZoning; label: string }[] = [
+  { value: "agricultural", label: "Agricultural (AG)" },
+  { value: "residential_rural", label: "Residential – Rural (RR)" },
+  { value: "residential_single_family", label: "Residential – Single Family (R1)" },
+  { value: "residential_multi_family", label: "Residential – Multi-Family (R2/R3/RM)" },
+  { value: "commercial", label: "Commercial (C)" },
+  { value: "industrial", label: "Industrial (I)" },
+  { value: "recreational", label: "Recreational (REC)" },
+  { value: "timber", label: "Timber (T)" },
+  { value: "vacant_unzoned", label: "Vacant / Unzoned" },
+  { value: "mixed_use", label: "Mixed Use (MU)" },
+  { value: "mobile_home", label: "Mobile Home / Manufactured Housing" },
+  { value: "conservation", label: "Conservation / Protected Land" },
+  { value: "planned_development", label: "Planned Development (PD)" },
+  { value: "other", label: "Other (please specify)" },
+];
+
+const ROAD_ACCESS_OPTIONS: { value: RoadAccess; label: string }[] = [
+  { value: "paved", label: "Paved" },
+  { value: "dirt", label: "Dirt" },
+  { value: "easement", label: "Easement" },
+  { value: "none", label: "None" },
+  { value: "unknown", label: "Unknown" },
+];
+
+const UTILITIES_OPTIONS: { key: keyof LandUtilities; label: string }[] = [
+  { key: "water", label: "Water" },
+  { key: "electric", label: "Electric" },
+  { key: "sewer", label: "Sewer" },
+  { key: "septic", label: "Septic" },
+  { key: "none", label: "None" },
+  { key: "unknown", label: "Unknown" },
+];
 
 interface LandSectionProps {
   apn: string;
   acreage: number;
-  zoning: string;
+  zoning: LandZoning | "";
+  zoningOther?: string;
+  roadAccess: RoadAccess | "";
+  landUtilities: LandUtilities;
   numberOfParcels: number;
   multiParcelSpreadsheet: File | null;
   financingStructure: FinancingStructure | "";
@@ -91,15 +130,69 @@ export function LandSection(props: LandSectionProps) {
           <Label className="text-sm font-medium">
             Zoning <span className="text-destructive">*</span>
           </Label>
-          <Input
+          <Select
             value={props.zoning}
-            onChange={(e) => props.onChange("zoning", e.target.value)}
-            placeholder="Ex: Residential, Commercial, Agricultural"
-            className={props.errors?.zoning ? "border-destructive" : ""}
-          />
+            onValueChange={(val) => props.onChange("zoning", val)}
+          >
+            <SelectTrigger className={props.errors?.zoning ? "border-destructive" : ""}>
+              <SelectValue placeholder="Select zoning type" />
+            </SelectTrigger>
+            <SelectContent>
+              {ZONING_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {props.errors?.zoning && (
             <p className="text-xs text-destructive animate-fade-in">
               {props.errors.zoning}
+            </p>
+          )}
+        </div>
+
+        {props.zoning === "other" && (
+          <div className="space-y-2 animate-fade-in">
+            <Label className="text-sm font-medium">
+              Please specify zoning <span className="text-destructive">*</span>
+            </Label>
+            <Input
+              value={props.zoningOther || ""}
+              onChange={(e) => props.onChange("zoningOther", e.target.value)}
+              placeholder="Specify zoning type"
+              className={props.errors?.zoningOther ? "border-destructive" : ""}
+            />
+            {props.errors?.zoningOther && (
+              <p className="text-xs text-destructive animate-fade-in">
+                {props.errors.zoningOther}
+              </p>
+            )}
+          </div>
+        )}
+
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">
+            Road Access <span className="text-destructive">*</span>
+          </Label>
+          <Select
+            value={props.roadAccess}
+            onValueChange={(val) => props.onChange("roadAccess", val)}
+          >
+            <SelectTrigger className={props.errors?.roadAccess ? "border-destructive" : ""}>
+              <SelectValue placeholder="Select road access type" />
+            </SelectTrigger>
+            <SelectContent>
+              {ROAD_ACCESS_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {props.errors?.roadAccess && (
+            <p className="text-xs text-destructive animate-fade-in">
+              {props.errors.roadAccess}
             </p>
           )}
         </div>
@@ -122,6 +215,52 @@ export function LandSection(props: LandSectionProps) {
             </p>
           )}
         </div>
+      </div>
+
+      {/* Utilities Section */}
+      <div className="space-y-4">
+        <Label className="text-sm font-medium">
+          Utilities <span className="text-destructive">*</span>
+        </Label>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {UTILITIES_OPTIONS.map((option) => (
+            <div key={option.key} className="flex items-center space-x-2">
+              <Checkbox
+                id={`utility-${option.key}`}
+                checked={props.landUtilities[option.key]}
+                onCheckedChange={(checked) => {
+                  const newUtilities = { ...props.landUtilities, [option.key]: !!checked };
+                  // If "none" is checked, uncheck all others
+                  if (option.key === "none" && checked) {
+                    Object.keys(newUtilities).forEach((key) => {
+                      if (key !== "none") newUtilities[key as keyof LandUtilities] = false;
+                    });
+                  }
+                  // If "unknown" is checked, uncheck all others
+                  if (option.key === "unknown" && checked) {
+                    Object.keys(newUtilities).forEach((key) => {
+                      if (key !== "unknown") newUtilities[key as keyof LandUtilities] = false;
+                    });
+                  }
+                  // If any utility is checked, uncheck "none" and "unknown"
+                  if (option.key !== "none" && option.key !== "unknown" && checked) {
+                    newUtilities.none = false;
+                    newUtilities.unknown = false;
+                  }
+                  props.onChange("landUtilities", newUtilities);
+                }}
+              />
+              <Label htmlFor={`utility-${option.key}`} className="font-normal cursor-pointer">
+                {option.label}
+              </Label>
+            </div>
+          ))}
+        </div>
+        {props.errors?.landUtilities && (
+          <p className="text-xs text-destructive animate-fade-in">
+            {props.errors.landUtilities}
+          </p>
+        )}
       </div>
 
       {/* Multi-Parcel Logic */}

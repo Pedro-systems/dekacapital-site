@@ -22,6 +22,38 @@ export type CreditScoreRange =
   | "700_749"
   | "750_plus";
 
+export type LandZoning =
+  | "agricultural"
+  | "residential_rural"
+  | "residential_single_family"
+  | "residential_multi_family"
+  | "commercial"
+  | "industrial"
+  | "recreational"
+  | "timber"
+  | "vacant_unzoned"
+  | "mixed_use"
+  | "mobile_home"
+  | "conservation"
+  | "planned_development"
+  | "other";
+
+export type RoadAccess =
+  | "paved"
+  | "dirt"
+  | "easement"
+  | "none"
+  | "unknown";
+
+export interface LandUtilities {
+  water: boolean;
+  electric: boolean;
+  sewer: boolean;
+  septic: boolean;
+  none: boolean;
+  unknown: boolean;
+}
+
 export interface Comparable {
   address: string;
   zillowLink: string;
@@ -123,7 +155,10 @@ export interface LandData extends BaseFormData {
   dealType: "land";
   apn: string;
   acreage: number;
-  zoning: string;
+  zoning: LandZoning | "";
+  zoningOther?: string;
+  roadAccess: RoadAccess | "";
+  utilities: LandUtilities;
   numberOfParcels: number;
   multiParcelSpreadsheet?: File | null;
   financingStructure: FinancingStructure;
