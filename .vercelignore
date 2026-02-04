@@ -1,0 +1,11 @@
+node_modules
+.git
+.vscode
+.manus-logs
+*.log
+.env.local
+.env.*.local
+dist/index.js
+server
+screenshots
+patches
