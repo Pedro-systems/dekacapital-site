@@ -1,0 +1,10 @@
+Screenshot inicial do portal DekaCapital Partners
+
+✓ Header com branding correto
+✓ Barra de progresso com 4 etapas visível
+✓ Pergunta gatekeeper: "Qual é o tipo de transação?"
+✓ 6 opções de deal type apresentadas em grid responsivo
+✓ Cards com ícones, títulos e descrições
+✓ Botão "Próximo" desabilitado até seleção
+✓ Design minimalista com paleta verde musgo e off-white
+✓ Animações suaves visíveis

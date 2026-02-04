@@ -1,0 +1,146 @@
+// Design Philosophy: Minimalismo Financeiro
+// Tipos para formulário multi-etapas com validação Zod
+
+export type DealType =
+  | "double_close"
+  | "emd"
+  | "fix_flip"
+  | "buy_hold"
+  | "gap_funding"
+  | "land";
+
+export type FinancingStructure = "loan" | "joint_venture";
+
+export type RentalStrategy = "str" | "ltr" | "mtr" | "mixed";
+
+export type ARVJustification = "appraisal" | "comparables" | "bpo";
+
+export type CreditScoreRange =
+  | "under_600"
+  | "600_649"
+  | "650_699"
+  | "700_749"
+  | "750_plus";
+
+export interface Comparable {
+  address: string;
+  zillowLink: string;
+  soldPrice: number;
+  soldDate: string;
+  squareFootage: number;
+}
+
+export interface TitleInfo {
+  companyName: string;
+  contactPerson: string;
+  phone: string;
+  email: string;
+}
+
+export interface ExperienceInfo {
+  yearsOfExperience: number;
+  dealsCompleted: number;
+  creditScoreRange: CreditScoreRange;
+  hasDefaulted: boolean;
+  defaultExplanation?: string;
+}
+
+// Base form data comum a todos os tipos
+export interface BaseFormData {
+  dealType: DealType;
+  titleInfo: TitleInfo;
+  experienceInfo: ExperienceInfo;
+}
+
+// Double Close específico
+export interface DoubleCloseData extends BaseFormData {
+  dealType: "double_close";
+  capitalRequested: number;
+  escrowCompanyName?: string;
+  escrowCompanyContact?: string;
+  contractAB: File | null;
+  contractBC: File | null;
+  proofOfFunds: File | null;
+}
+
+// EMD específico
+export interface EMDData extends BaseFormData {
+  dealType: "emd";
+  emdAmount: number;
+  proofOfEMD: File | null;
+}
+
+// Fix and Flip específico
+export interface FixFlipData extends BaseFormData {
+  dealType: "fix_flip";
+  purchasePrice: number;
+  downPayment: number;
+  loanAmount: number;
+  totalRehabBudget: number;
+  scopeOfWork: File | null;
+  contractorEstimates: File | null;
+  arvJustification: ARVJustification;
+  comparables?: Comparable[];
+  holdingPeriod: number;
+  propertyTaxes: number;
+  insurance: number;
+  utilities: number;
+  otherCosts: number;
+  financingStructure: FinancingStructure;
+}
+
+// Buy and Hold específico
+export interface BuyHoldData extends BaseFormData {
+  dealType: "buy_hold";
+  rentalStrategy: RentalStrategy;
+  isSubjectTo: boolean;
+  currentLenderName?: string;
+  currentLoanBalance?: number;
+  currentMonthlyPayment?: number;
+  currentInterestRate?: number;
+  mortgageStatement?: File | null;
+  estimatedMonthlyRent: number;
+  operatingExpenses: number;
+  propertyTaxes: number;
+  insurance: number;
+  hoaFees: number;
+  calculatedNOI: number;
+  calculatedDSCR: number;
+  financingStructure: FinancingStructure;
+}
+
+// Gap Funding específico
+export interface GapFundingData extends BaseFormData {
+  dealType: "gap_funding";
+  gapAmount: number;
+  hasPrimaryLender: boolean;
+  primaryLenderName?: string;
+  primaryLenderTermSheet?: File | null;
+}
+
+// Land Funding específico
+export interface LandData extends BaseFormData {
+  dealType: "land";
+  apn: string;
+  acreage: number;
+  zoning: string;
+  numberOfParcels: number;
+  multiParcelSpreadsheet?: File | null;
+  financingStructure: FinancingStructure;
+}
+
+// Union type de todos os dados possíveis
+export type IntakeFormData =
+  | DoubleCloseData
+  | EMDData
+  | FixFlipData
+  | BuyHoldData
+  | GapFundingData
+  | LandData;
+
+// Webhook payload
+export interface WebhookPayload {
+  formData: IntakeFormData;
+  tags: string[];
+  submittedAt: string;
+}

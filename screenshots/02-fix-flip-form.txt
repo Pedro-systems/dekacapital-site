@@ -1,0 +1,16 @@
+Screenshot da etapa 2 - Fix and Flip
+
+✓ Progresso atualizado: Etapa 1 completa (checkmark verde)
+✓ Etapa 2 ativa (círculo verde com anel)
+✓ Seções organizadas hierarquicamente:
+  - Detalhes da Compra (3 campos de moeda)
+  - Orçamento de Reforma (1 campo moeda + 2 uploads)
+  - After Repair Value (dropdown de método)
+  - Custos de Holding (5 campos)
+  - Estrutura de Financiamento (radio buttons)
+✓ Campos de moeda com símbolo $ e formatação
+✓ Upload com drag & drop visual
+✓ Validação inline preparada
+✓ Botões Voltar e Próximo visíveis
+✓ Layout responsivo em 2 colunas (desktop)
+✓ Cards com bordas sutis e sombras

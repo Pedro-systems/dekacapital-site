@@ -1,0 +1,224 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* 
+Design Philosophy: Minimalismo Financeiro de Alto Contraste
+- Paleta: Off-white (#fafaf9), Grafite (#27272a), Rosa Magenta (#FF0AFD)
+- Tipografia: Inter (fallback para Sohne)
+- Espaçamento: Generoso e intencional
+- Animações: Suaves com cubic-bezier(0.4, 0.0, 0.2, 1)
+*/
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
+:root {
+  /* Rosa magenta para ações primárias e confirmações */
+  --primary: oklch(0.66 0.33 320);
+  --primary-foreground: oklch(0.98 0.01 320);
+  
+  --radius: 0.5rem;
+  
+  /* Off-white quente para background */
+  --background: oklch(0.985 0.002 85);
+  /* Grafite profundo para texto */
+  --foreground: oklch(0.2 0.01 265);
+  
+  /* Cards com sombra sutil */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.01 265);
+  
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.01 265);
+  
+  /* Cinza claro para elementos secundários */
+  --secondary: oklch(0.95 0.002 265);
+  --secondary-foreground: oklch(0.3 0.01 265);
+  
+  /* Cinza médio para elementos muted */
+  --muted: oklch(0.96 0.002 265);
+  --muted-foreground: oklch(0.5 0.01 265);
+  
+  /* Rosa magenta mais clara para accent */
+  --accent: oklch(0.94 0.1 320);
+  --accent-foreground: oklch(0.66 0.33 320);
+  
+  /* Vermelho suave para erros */
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.98 0.01 25);
+  
+  /* Bordas sutis */
+  --border: oklch(0.88 0.002 265);
+  --input: oklch(0.88 0.002 265);
+  
+  /* Ring em rosa magenta */
+  --ring: oklch(0.66 0.33 320);
+  
+  --chart-1: oklch(0.56 0.33 320);
+  --chart-2: oklch(0.66 0.33 320);
+  --chart-3: oklch(0.76 0.28 320);
+  --chart-4: oklch(0.86 0.23 320);
+  --chart-5: oklch(0.90 0.18 320);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    letter-spacing: -0.011em;
+  }
+  
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+  
+  /* Smooth transitions globais */
+  * {
+    transition-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 1280px;
+    }
+  }
+  
+  /* Floating label effect para inputs */
+  .floating-input {
+    @apply relative;
+  }
+  
+  .floating-input input:focus ~ label,
+  .floating-input input:not(:placeholder-shown) ~ label,
+  .floating-input select:focus ~ label,
+  .floating-input select:not([value=""]) ~ label,
+  .floating-input textarea:focus ~ label,
+  .floating-input textarea:not(:placeholder-shown) ~ label {
+    @apply -translate-y-6 text-xs text-primary;
+  }
+  
+  .floating-input label {
+    @apply absolute left-3 top-3 text-sm text-muted-foreground pointer-events-none transition-all duration-300;
+  }
+  
+  /* Card com sombra sutil e elevação */
+  .card-elevated {
+    @apply bg-card rounded-lg shadow-sm border border-border/50;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.02), 0 1px 2px -1px rgb(0 0 0 / 0.02);
+  }
+  
+  .card-elevated:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.03), 0 2px 4px -2px rgb(0 0 0 / 0.03);
+  }
+}
+
+/* Animações customizadas */
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}

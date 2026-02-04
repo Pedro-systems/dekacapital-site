@@ -1,0 +1,19 @@
+Screenshot da lógica condicional - Land Multi-Parcel
+
+✓ Formulário Land com 4 campos básicos:
+  - APN (Assessor's Parcel Number)
+  - Acreage (acres)
+  - Zoning (text)
+  - Número de Parcelas (number)
+✓ Estrutura de Financiamento (Loan/JV)
+
+LÓGICA CONDICIONAL TESTADA:
+- Quando "Número de Parcelas" > 1 (testado com 13):
+  ✓ Nova seção "Múltiplas Parcelas Detectadas" apareceu
+  ✓ Texto explicativo sobre o template
+  ✓ Botão "Download Multi-Parcel Template" visível
+  ✓ Campo de upload obrigatório para planilha (.csv, .xls, .xlsx)
+  ✓ Máximo 10MB indicado
+
+TESTE CONFIRMADO: Lógica condicional multi-parcel funcionando perfeitamente!
+A interface detecta automaticamente quando há mais de 1 parcela e exige o template.
