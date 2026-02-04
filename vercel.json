@@ -1,19 +1,17 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "version": 2,
   "buildCommand": "pnpm build:client",
   "devCommand": "pnpm dev",
   "installCommand": "pnpm install",
-  "framework": null,
   "outputDirectory": "dist/public",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/webhook",
-      "dest": "https://dev-maneger-01-n8n.yjnxkd.easypanel.host/webhook/recebeDataForm"
+      "source": "/api/webhook",
+      "destination": "https://dev-maneger-01-n8n.yjnxkd.easypanel.host/webhook/recebeDataForm"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
