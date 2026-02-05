@@ -128,7 +128,21 @@ export function IntakeForm() {
         if (parsed.dealType) setDealType(parsed.dealType);
         if (parsed.titleInfo) setTitleInfo(parsed.titleInfo);
         if (parsed.experienceInfo) setExperienceInfo(parsed.experienceInfo);
-        if (parsed.formData) setFormData(parsed.formData);
+        if (parsed.formData) {
+          // Ensure landUtilities has proper structure
+          const formDataToSet = {
+            ...parsed.formData,
+            landUtilities: parsed.formData.landUtilities || {
+              water: false,
+              electric: false,
+              sewer: false,
+              septic: false,
+              none: false,
+              unknown: false,
+            },
+          };
+          setFormData(formDataToSet);
+        }
         if (parsed.currentStep) setCurrentStep(parsed.currentStep);
       } catch (e) {
         console.error("Failed to load saved form data", e);
@@ -199,7 +213,14 @@ export function IntakeForm() {
         if (!formData.zoning) newErrors.zoning = "Required field";
         if (formData.zoning === "other" && !formData.zoningOther) newErrors.zoningOther = "Required field";
         if (!formData.roadAccess) newErrors.roadAccess = "Required field";
-        const utilities = formData.landUtilities;
+        const utilities = formData.landUtilities || {
+          water: false,
+          electric: false,
+          sewer: false,
+          septic: false,
+          none: false,
+          unknown: false,
+        };
         if (!utilities.water && !utilities.electric && !utilities.sewer && !utilities.septic && !utilities.none && !utilities.unknown) {
           newErrors.landUtilities = "Please select at least one option";
         }
@@ -406,7 +427,14 @@ export function IntakeForm() {
               zoning={formData.zoning}
               zoningOther={formData.zoningOther}
               roadAccess={formData.roadAccess}
-              landUtilities={formData.landUtilities}
+              landUtilities={formData.landUtilities || {
+                water: false,
+                electric: false,
+                sewer: false,
+                septic: false,
+                none: false,
+                unknown: false,
+              }}
               numberOfParcels={formData.numberOfParcels}
               multiParcelSpreadsheet={formData.multiParcelSpreadsheet}
               financingStructure={formData.financingStructure}

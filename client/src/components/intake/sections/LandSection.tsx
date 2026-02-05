@@ -227,9 +227,17 @@ export function LandSection(props: LandSectionProps) {
             <div key={option.key} className="flex items-center space-x-2">
               <Checkbox
                 id={`utility-${option.key}`}
-                checked={props.landUtilities[option.key]}
+                checked={props.landUtilities?.[option.key] || false}
                 onCheckedChange={(checked) => {
-                  const newUtilities = { ...props.landUtilities, [option.key]: !!checked };
+                  const currentUtilities = props.landUtilities || {
+                    water: false,
+                    electric: false,
+                    sewer: false,
+                    septic: false,
+                    none: false,
+                    unknown: false,
+                  };
+                  const newUtilities = { ...currentUtilities, [option.key]: !!checked };
                   // If "none" is checked, uncheck all others
                   if (option.key === "none" && checked) {
                     Object.keys(newUtilities).forEach((key) => {
