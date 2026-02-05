@@ -3,7 +3,6 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -13,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { CurrencyInput } from "../CurrencyInput";
 import { FileUpload } from "../FileUpload";
-import type { ARVJustification, FinancingStructure, Comparable } from "@/types/intake";
+import type { ARVJustification, Comparable } from "@/types/intake";
 
 interface FixFlipSectionProps {
   purchasePrice: number;
@@ -29,7 +28,6 @@ interface FixFlipSectionProps {
   insurance: number;
   utilities: number;
   otherCosts: number;
-  financingStructure: FinancingStructure | "";
   onChange: (field: string, value: any) => void;
   errors?: Record<string, string>;
 }
@@ -308,42 +306,6 @@ export function FixFlipSection(props: FixFlipSectionProps) {
             error={props.errors?.otherCosts}
           />
         </div>
-      </div>
-
-      {/* Section: Financing Structure */}
-      <div className="space-y-4">
-        <div>
-          <h3 className="text-xl font-semibold text-foreground mb-2">
-            Financing Structure
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            Type of structure desired for the transaction
-          </p>
-        </div>
-
-        <RadioGroup
-          value={props.financingStructure}
-          onValueChange={(val) => props.onChange("financingStructure", val)}
-          className="flex space-x-6"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="loan" id="financing-loan" />
-            <Label htmlFor="financing-loan" className="font-normal cursor-pointer">
-              Loan
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="joint_venture" id="financing-jv" />
-            <Label htmlFor="financing-jv" className="font-normal cursor-pointer">
-              Joint Venture
-            </Label>
-          </div>
-        </RadioGroup>
-        {props.errors?.financingStructure && (
-          <p className="text-xs text-destructive animate-fade-in">
-            {props.errors.financingStructure}
-          </p>
-        )}
       </div>
     </div>
   );

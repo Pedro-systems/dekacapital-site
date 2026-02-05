@@ -9,8 +9,6 @@ export type DealType =
   | "gap_funding"
   | "land";
 
-export type FinancingStructure = "loan" | "joint_venture";
-
 export type RentalStrategy = "str" | "ltr" | "mtr" | "mixed";
 
 export type ARVJustification = "appraisal" | "comparables" | "bpo";
@@ -118,7 +116,6 @@ export interface FixFlipData extends BaseFormData {
   insurance: number;
   utilities: number;
   otherCosts: number;
-  financingStructure: FinancingStructure;
 }
 
 // Buy and Hold específico
@@ -138,7 +135,6 @@ export interface BuyHoldData extends BaseFormData {
   hoaFees: number;
   calculatedNOI: number;
   calculatedDSCR: number;
-  financingStructure: FinancingStructure;
 }
 
 // Gap Funding específico
@@ -161,7 +157,6 @@ export interface LandData extends BaseFormData {
   utilities: LandUtilities;
   numberOfParcels: number;
   multiParcelSpreadsheet?: File | null;
-  financingStructure: FinancingStructure;
 }
 
 // Union type de todos os dados possíveis

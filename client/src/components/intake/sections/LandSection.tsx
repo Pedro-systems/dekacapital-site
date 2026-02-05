@@ -4,12 +4,11 @@
 import { Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "../FileUpload";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { FinancingStructure, LandZoning, RoadAccess, LandUtilities } from "@/types/intake";
+import type { LandZoning, RoadAccess, LandUtilities } from "@/types/intake";
 
 const ZONING_OPTIONS: { value: LandZoning; label: string }[] = [
   { value: "agricultural", label: "Agricultural (AG)" },
@@ -54,7 +53,6 @@ interface LandSectionProps {
   landUtilities: LandUtilities;
   numberOfParcels: number;
   multiParcelSpreadsheet: File | null;
-  financingStructure: FinancingStructure | "";
   onChange: (field: string, value: any) => void;
   errors?: Record<string, string>;
 }
@@ -303,42 +301,6 @@ export function LandSection(props: LandSectionProps) {
           />
         </div>
       )}
-
-      {/* Section: Financing Structure */}
-      <div className="space-y-4">
-        <div>
-          <h3 className="text-xl font-semibold text-foreground mb-2">
-            Financing Structure
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            Type of structure desired for the transaction
-          </p>
-        </div>
-
-        <RadioGroup
-          value={props.financingStructure}
-          onValueChange={(val) => props.onChange("financingStructure", val)}
-          className="flex space-x-6"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="loan" id="financing-loan-land" />
-            <Label htmlFor="financing-loan-land" className="font-normal cursor-pointer">
-              Loan
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="joint_venture" id="financing-jv-land" />
-            <Label htmlFor="financing-jv-land" className="font-normal cursor-pointer">
-              Joint Venture
-            </Label>
-          </div>
-        </RadioGroup>
-        {props.errors?.financingStructure && (
-          <p className="text-xs text-destructive animate-fade-in">
-            {props.errors.financingStructure}
-          </p>
-        )}
-      </div>
     </div>
   );
 }

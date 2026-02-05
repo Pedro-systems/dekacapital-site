@@ -79,7 +79,6 @@ export const fixFlipSchema = z.object({
   insurance: z.number().min(0, "Insurance cannot be negative"),
   utilities: z.number().min(0, "Utilities cannot be negative"),
   otherCosts: z.number().min(0, "Other costs cannot be negative"),
-  financingStructure: z.enum(["loan", "joint_venture"]),
   titleInfo: titleInfoSchema,
   experienceInfo: experienceInfoSchema,
 }).refine(
@@ -110,7 +109,6 @@ export const buyHoldSchema = z.object({
   hoaFees: z.number().min(0, "HOA fees cannot be negative"),
   calculatedNOI: z.number(),
   calculatedDSCR: z.number(),
-  financingStructure: z.enum(["loan", "joint_venture"]),
   titleInfo: titleInfoSchema,
   experienceInfo: experienceInfoSchema,
 }).refine(
@@ -182,7 +180,6 @@ export const landSchema = z.object({
     unknown: z.boolean(),
   }),
   numberOfParcels: z.number().int().positive("Number of parcels must be positive"),
-  financingStructure: z.enum(["loan", "joint_venture"]),
   titleInfo: titleInfoSchema,
   experienceInfo: experienceInfoSchema,
 });

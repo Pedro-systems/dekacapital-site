@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { CurrencyInput } from "../CurrencyInput";
 import { FileUpload } from "../FileUpload";
-import type { RentalStrategy, FinancingStructure } from "@/types/intake";
+import type { RentalStrategy } from "@/types/intake";
 
 interface BuyHoldSectionProps {
   rentalStrategy: RentalStrategy | "";
@@ -31,7 +31,6 @@ interface BuyHoldSectionProps {
   hoaFees: number;
   calculatedNOI: number;
   calculatedDSCR: number;
-  financingStructure: FinancingStructure | "";
   onChange: (field: string, value: any) => void;
   errors?: Record<string, string>;
 }
@@ -282,42 +281,6 @@ export function BuyHoldSection(props: BuyHoldSectionProps) {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Section: Financing Structure */}
-      <div className="space-y-4">
-        <div>
-          <h3 className="text-xl font-semibold text-foreground mb-2">
-            Financing Structure
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            Type of structure desired for the transaction
-          </p>
-        </div>
-
-        <RadioGroup
-          value={props.financingStructure}
-          onValueChange={(val) => props.onChange("financingStructure", val)}
-          className="flex space-x-6"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="loan" id="financing-loan-bh" />
-            <Label htmlFor="financing-loan-bh" className="font-normal cursor-pointer">
-              Loan
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="joint_venture" id="financing-jv-bh" />
-            <Label htmlFor="financing-jv-bh" className="font-normal cursor-pointer">
-              Joint Venture
-            </Label>
-          </div>
-        </RadioGroup>
-        {props.errors?.financingStructure && (
-          <p className="text-xs text-destructive animate-fade-in">
-            {props.errors.financingStructure}
-          </p>
-        )}
       </div>
     </div>
   );

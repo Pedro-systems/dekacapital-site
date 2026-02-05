@@ -113,8 +113,6 @@ export function IntakeForm() {
     },
     numberOfParcels: 1,
     multiParcelSpreadsheet: null,
-    // Comum
-    financingStructure: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -194,11 +192,9 @@ export function IntakeForm() {
         if (formData.loanAmount <= 0) newErrors.loanAmount = "Required field";
         if (formData.totalRehabBudget <= 0) newErrors.totalRehabBudget = "Required field";
         if (!formData.arvJustification) newErrors.arvJustification = "Required field";
-        if (!formData.financingStructure) newErrors.financingStructure = "Required field";
       } else if (dealType === "buy_hold") {
         if (!formData.rentalStrategy) newErrors.rentalStrategy = "Required field";
         if (formData.estimatedMonthlyRent <= 0) newErrors.estimatedMonthlyRent = "Required field";
-        if (!formData.financingStructure) newErrors.financingStructure = "Required field";
         if (formData.isSubjectTo && !formData.currentLenderName) {
           newErrors.currentLenderName = "Required field for Subject-To";
         }
@@ -224,7 +220,6 @@ export function IntakeForm() {
         if (!utilities.water && !utilities.electric && !utilities.sewer && !utilities.septic && !utilities.none && !utilities.unknown) {
           newErrors.landUtilities = "Please select at least one option";
         }
-        if (!formData.financingStructure) newErrors.financingStructure = "Required field";
       }
     }
 
@@ -384,7 +379,6 @@ export function IntakeForm() {
               insurance={formData.insurance}
               utilities={formData.utilities}
               otherCosts={formData.otherCosts}
-              financingStructure={formData.financingStructure}
               onChange={handleFormDataChange}
               errors={errors}
             />
@@ -405,7 +399,6 @@ export function IntakeForm() {
               hoaFees={formData.hoaFees}
               calculatedNOI={formData.calculatedNOI}
               calculatedDSCR={formData.calculatedDSCR}
-              financingStructure={formData.financingStructure}
               onChange={handleFormDataChange}
               errors={errors}
             />
@@ -437,7 +430,6 @@ export function IntakeForm() {
               }}
               numberOfParcels={formData.numberOfParcels}
               multiParcelSpreadsheet={formData.multiParcelSpreadsheet}
-              financingStructure={formData.financingStructure}
               onChange={handleFormDataChange}
               errors={errors}
             />
