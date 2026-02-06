@@ -58,6 +58,17 @@ interface LandSectionProps {
 }
 
 export function LandSection(props: LandSectionProps) {
+  // Ensure landUtilities is always a valid object with all required keys
+  const safeUtilities: LandUtilities = {
+    water: false,
+    electric: false,
+    sewer: false,
+    septic: false,
+    none: false,
+    unknown: false,
+    ...(props.landUtilities && typeof props.landUtilities === 'object' ? props.landUtilities : {}),
+  };
+
   const handleDownloadTemplate = () => {
     // Create a simple CSV template
     const csvContent = `Parcel Number,APN,Acreage,Zoning,Purchase Price,Notes
@@ -225,17 +236,9 @@ export function LandSection(props: LandSectionProps) {
             <div key={option.key} className="flex items-center space-x-2">
               <Checkbox
                 id={`utility-${option.key}`}
-                checked={props.landUtilities?.[option.key] || false}
+                checked={safeUtilities[option.key]}
                 onCheckedChange={(checked) => {
-                  const currentUtilities = props.landUtilities || {
-                    water: false,
-                    electric: false,
-                    sewer: false,
-                    septic: false,
-                    none: false,
-                    unknown: false,
-                  };
-                  const newUtilities = { ...currentUtilities, [option.key]: !!checked };
+                  const newUtilities = { ...safeUtilities, [option.key]: !!checked };
                   // If "none" is checked, uncheck all others
                   if (option.key === "none" && checked) {
                     Object.keys(newUtilities).forEach((key) => {

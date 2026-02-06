@@ -33,8 +33,14 @@ interface FixFlipSectionProps {
 }
 
 export function FixFlipSection(props: FixFlipSectionProps) {
+  // Ensure comparables is always a valid array with 3 items
+  const defaultComparable: Comparable = { address: "", zillowLink: "", soldPrice: 0, soldDate: "", squareFootage: 0 };
+  const safeComparables: Comparable[] = Array.isArray(props.comparables) && props.comparables.length >= 3
+    ? props.comparables.map(c => c ? { ...defaultComparable, ...c } : { ...defaultComparable })
+    : [{ ...defaultComparable }, { ...defaultComparable }, { ...defaultComparable }];
+
   const handleComparableChange = (index: number, field: keyof Comparable, value: any) => {
-    const newComparables = [...props.comparables];
+    const newComparables = [...safeComparables];
     newComparables[index] = { ...newComparables[index], [field]: value };
     props.onChange("comparables", newComparables);
   };
@@ -164,7 +170,7 @@ export function FixFlipSection(props: FixFlipSectionProps) {
                       Address <span className="text-destructive">*</span>
                     </Label>
                     <Input
-                      value={props.comparables[index]?.address || ""}
+                      value={safeComparables[index].address}
                       onChange={(e) =>
                         handleComparableChange(index, "address", e.target.value)
                       }
@@ -178,7 +184,7 @@ export function FixFlipSection(props: FixFlipSectionProps) {
                     </Label>
                     <Input
                       type="url"
-                      value={props.comparables[index]?.zillowLink || ""}
+                      value={safeComparables[index].zillowLink}
                       onChange={(e) =>
                         handleComparableChange(index, "zillowLink", e.target.value)
                       }
@@ -197,7 +203,7 @@ export function FixFlipSection(props: FixFlipSectionProps) {
                       <Input
                         type="number"
                         className="pl-7"
-                        value={props.comparables[index]?.soldPrice || ""}
+                        value={safeComparables[index].soldPrice || ""}
                         onChange={(e) =>
                           handleComparableChange(
                             index,
@@ -216,7 +222,7 @@ export function FixFlipSection(props: FixFlipSectionProps) {
                     </Label>
                     <Input
                       type="date"
-                      value={props.comparables[index]?.soldDate || ""}
+                      value={safeComparables[index].soldDate}
                       onChange={(e) =>
                         handleComparableChange(index, "soldDate", e.target.value)
                       }
@@ -229,7 +235,7 @@ export function FixFlipSection(props: FixFlipSectionProps) {
                     </Label>
                     <Input
                       type="number"
-                      value={props.comparables[index]?.squareFootage || ""}
+                      value={safeComparables[index].squareFootage || ""}
                       onChange={(e) =>
                         handleComparableChange(
                           index,

@@ -127,23 +127,40 @@ export function IntakeForm() {
         if (parsed.titleInfo) setTitleInfo(parsed.titleInfo);
         if (parsed.experienceInfo) setExperienceInfo(parsed.experienceInfo);
         if (parsed.formData) {
-          // Ensure landUtilities has proper structure
+          // Ensure landUtilities has proper structure with all required keys
+          const defaultLandUtilities = {
+            water: false,
+            electric: false,
+            sewer: false,
+            septic: false,
+            none: false,
+            unknown: false,
+          };
+          // Safely merge landUtilities, ensuring all keys exist
+          const savedLandUtilities = parsed.formData.landUtilities;
+          const landUtilities = savedLandUtilities && typeof savedLandUtilities === 'object'
+            ? { ...defaultLandUtilities, ...savedLandUtilities }
+            : defaultLandUtilities;
+          
+          // Ensure comparables array is properly structured
+          const defaultComparable = { address: "", zillowLink: "", soldPrice: 0, soldDate: "", squareFootage: 0 };
+          const savedComparables = parsed.formData.comparables;
+          const comparables = Array.isArray(savedComparables) && savedComparables.length === 3
+            ? savedComparables.map((c: any) => ({ ...defaultComparable, ...(c || {}) }))
+            : [{ ...defaultComparable }, { ...defaultComparable }, { ...defaultComparable }];
+          
           const formDataToSet = {
             ...parsed.formData,
-            landUtilities: parsed.formData.landUtilities || {
-              water: false,
-              electric: false,
-              sewer: false,
-              septic: false,
-              none: false,
-              unknown: false,
-            },
+            landUtilities,
+            comparables,
           };
           setFormData(formDataToSet);
         }
         if (parsed.currentStep) setCurrentStep(parsed.currentStep);
       } catch (e) {
         console.error("Failed to load saved form data", e);
+        // Clear corrupted localStorage data
+        localStorage.removeItem("dekacapital-intake-form");
       }
     }
   }, []);
@@ -209,15 +226,11 @@ export function IntakeForm() {
         if (!formData.zoning) newErrors.zoning = "Required field";
         if (formData.zoning === "other" && !formData.zoningOther) newErrors.zoningOther = "Required field";
         if (!formData.roadAccess) newErrors.roadAccess = "Required field";
-        const utilities = formData.landUtilities || {
-          water: false,
-          electric: false,
-          sewer: false,
-          septic: false,
-          none: false,
-          unknown: false,
-        };
-        if (!utilities.water && !utilities.electric && !utilities.sewer && !utilities.septic && !utilities.none && !utilities.unknown) {
+        const utilities = formData.landUtilities && typeof formData.landUtilities === 'object'
+          ? formData.landUtilities
+          : { water: false, electric: false, sewer: false, septic: false, none: false, unknown: false };
+        const hasUtility = utilities?.water || utilities?.electric || utilities?.sewer || utilities?.septic || utilities?.none || utilities?.unknown;
+        if (!hasUtility) {
           newErrors.landUtilities = "Please select at least one option";
         }
       }
