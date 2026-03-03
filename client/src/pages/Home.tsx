@@ -2,25 +2,16 @@
 // Página principal com formulário de intake
 
 import { IntakeForm } from "@/components/intake/IntakeForm";
+import Header from "@/components/Header";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container py-4 md:py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl md:text-2xl font-semibold text-foreground tracking-tight">
-                DekaCapital Partners
-              </h1>
-              <p className="text-xs md:text-sm text-muted-foreground mt-1">
-                Real Estate Lending Qualification Portal
-              </p>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
+      
+      {/* Spacer for fixed header */}
+      <div className="h-[60px]" />
 
       {/* Main Form */}
       <IntakeForm />
