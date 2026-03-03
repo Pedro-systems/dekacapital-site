@@ -32,6 +32,7 @@ export function IntakeForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [redirectCountdown, setRedirectCountdown] = useState(5);
 
   // Common state
   const [dealType, setDealType] = useState<DealType | null>(null);
@@ -174,6 +175,24 @@ export function IntakeForm() {
     }
   }, [dealType, titleInfo, experienceInfo, formData, currentStep]);
 
+  // Redirect after successful submission
+  useEffect(() => {
+    if (isSuccess) {
+      const interval = setInterval(() => {
+        setRedirectCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            window.location.href = "https://dekacapitalpartners.com";
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isSuccess]);
+
   const handleFormDataChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     // Limpar erro do campo
@@ -293,6 +312,7 @@ export function IntakeForm() {
 
       // Mostrar mensagem de sucesso
       setIsSuccess(true);
+      setRedirectCountdown(5); // Reset countdown
       toast.success(getConfirmationMessage(dealType!));
     } catch (error) {
       console.error("Submission error:", error);
@@ -322,23 +342,18 @@ export function IntakeForm() {
           <p className="text-sm md:text-base text-muted-foreground">
             {getConfirmationMessage(dealType!)}
           </p>
+          <div className="pt-4">
+            <p className="text-sm text-muted-foreground">
+              Redirecting to DekaCapital Partners in <span className="font-semibold text-primary">{redirectCountdown}</span> seconds...
+            </p>
+          </div>
           <Button
             onClick={() => {
-              setIsSuccess(false);
-              setCurrentStep(1);
-              setDealType(null);
-              setFormData({});
-              setTitleInfo({ companyName: "", contactPerson: "", phone: "", email: "" });
-              setExperienceInfo({
-                yearsOfExperience: 0,
-                dealsCompleted: 0,
-                creditScoreRange: "under_600",
-                hasDefaulted: false,
-              });
+              window.location.href = "https://dekacapitalpartners.com";
             }}
-            variant="outline"
+            className="mt-4"
           >
-            Submit New Application
+            Go Now
           </Button>
         </div>
       </div>
